@@ -134,7 +134,7 @@ std::string getValidSecret(const std::string& prompt, const std::string& errorMs
     }
 }
 
-bool promptInput() {
+Contact promptInput() {
     std::string first_name;
     std::string last_name;
     std::string nickname;
@@ -156,18 +156,23 @@ bool promptInput() {
     std::cout << "Phone number: " << phone_number << std::endl;
     std::cout << "Darkest secret: " << "***********" << std::endl;
 
-    return (true);
+    Contact tempContact(first_name, last_name, nickname, phone_number, darkest_secret);
+    return (tempContact);
 }
 
 
 int main() {
     std::string selected_option;
+    Contact contact;
+    PhoneBook *phoneBook = new PhoneBook();
     while (1)  {
         clearConsole();
         std::cout << "Select an option (ADD / SEARCH / EXIT): ";
         std::cin >> selected_option;
         if (selected_option == ADD) {
-            promptInput();
+            contact = promptInput();
+            phoneBook->addContact(contact);
+            std::cout << "contact_count:" << phoneBook->getContactCount();
         } else if (selected_option == SEARCH) {
             std::cout << "SEARCHING.." << std::endl;
         } else if (selected_option == EXIT) {

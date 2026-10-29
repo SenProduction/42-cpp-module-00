@@ -1,6 +1,6 @@
 #include "Contact.hpp"
 
-Contact::Contact() : first_name("UNKNOWN"), last_name("UNKNOWN"), nickname("UNKNOWN"), phone_number(0), darkest_secret("UNKNOWN") {}
+Contact::Contact() : first_name(""), last_name(""), nickname(""), phone_number(0), darkest_secret("") {}
 
 Contact::Contact(std::string first_name, std::string last_name, std::string nickname, long phone_number, std::string darkest_secret) {
     this->first_name = first_name;

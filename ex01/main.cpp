@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib> 
 #include <limits>
+#include <sstream> 
 #include <iomanip>
 #include "PhoneBook.hpp"
 
@@ -134,6 +135,32 @@ std::string getValidSecret(const std::string& prompt, const std::string& errorMs
     }
 }
 
+int getValidIndex(const std::string& prompt, const std::string& errorMsg) {
+    std::string input;
+    int num;
+
+    while (true) {
+        std::cout << prompt;
+        if (!(std::cin >> input)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Stream error. ";
+        }
+
+        std::istringstream iss(input);
+        bool containsNonDigit = false;
+        if (iss >> num)
+            containsNonDigit = true;
+
+        if (!containsNonDigit) {
+            std::cout << errorMsg << std::endl;
+            continue ;
+        }
+
+        return (num);
+    }
+}
+
 Contact promptInput() {
     std::string first_name;
     std::string last_name;
@@ -160,26 +187,56 @@ Contact promptInput() {
     return (tempContact);
 }
 
+std::string formatField(std::string field)
+{
+    if (field.length() > 10)
+        field = field.substr(0, 9) + ".";
+    return field;
+}
+
+void displayContact(int index, std::string first,
+                     std::string last, std::string nick)
+{
+    std::cout << "|"
+              << std::right << std::setw(10) << "Index"
+              << "|" << std::setw(10) << "First Name"
+              << "|" << std::setw(10) << "Last Name"
+              << "|" << std::setw(10) << "Nickname"
+              << "|" << std::endl;
+
+    std::cout << "|"
+              << std::right << std::setw(10) << index
+              << "|" << std::setw(10) << formatField(first)
+              << "|" << std::setw(10) << formatField(last)
+              << "|" << std::setw(10) << formatField(nick)
+              << "|" << std::endl;
+}
 
 int main() {
     std::string selected_option;
     Contact contact;
-    PhoneBook *phoneBook = new PhoneBook();
+    PhoneBook phoneBook;
     while (1)  {
-        clearConsole();
-        std::cout << "Select an option (ADD / SEARCH / EXIT): ";
+        std::cout << "\n===== PHONEBOOK =====" << std::endl;
+        std::cout << "1. ADD" << std::endl;
+        std::cout << "2. SEARCH" << std::endl;
+        std::cout << "3. EXIT" << std::endl;
+        std::cout << "Select an option: ";
         std::cin >> selected_option;
-        if (selected_option == ADD) {
+        if (selected_option == "1" || selected_option == ADD) {
             contact = promptInput();
-            phoneBook->addContact(contact);
-            std::cout << "contact_count:" << phoneBook->getContactCount();
-        } else if (selected_option == SEARCH) {
-            std::cout << "SEARCHING.." << std::endl;
-        } else if (selected_option == EXIT) {
-            std::cout << "EXITING SOON.." << std::endl;
-            return (1);
+            phoneBook.addContact(contact);
+            std::cout << "contact_count:" << phoneBook.getContactCount() << std::endl;
+        } else if (selected_option == "2" || selected_option == SEARCH) {
+            int index = getValidIndex("Enter index to search from entry (between 0 to 7): ", "Invalid index!");
+            contact = phoneBook.searchContactByIndex(index);
+            if (!contact.getNickname().empty())
+                displayContact(index, contact.getFirstName(), contact.getLastName(), contact.getNickname());
+        } else if (selected_option == "3" || selected_option == EXIT) {
+            return (0);
         } else {
             std::cout << "Invalid selection. Please enter a valid option.";
         }
     }
+    return (0);
 }

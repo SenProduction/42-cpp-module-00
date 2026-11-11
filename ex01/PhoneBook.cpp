@@ -1,6 +1,4 @@
 #include "PhoneBook.hpp"
-#include <iostream>
-#include <string>
 
 PhoneBook::PhoneBook() : contactCount(0) {};
 

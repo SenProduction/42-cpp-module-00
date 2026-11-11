@@ -5,11 +5,12 @@ CPPVER := -std=c++98
 
 SRCS := Contact.cpp \
         PhoneBook.cpp \
-        main.cpp
+		Validator.cpp \
+        Main.cpp
 
 OBJS := $(SRCS:.cpp=.o)
 
-HEADERS := Contact.hpp PhoneBook.hpp
+HEADERS := Contact.hpp PhoneBook.hpp Validator.hpp
 
 .PHONY: all clean fclean re
 

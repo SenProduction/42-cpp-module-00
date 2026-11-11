@@ -3,7 +3,7 @@ CPPC := c++
 CPPFLAGS := -Wall -Wextra -Werror
 CPPVER := -std=c++98
 
-SRC = megaphone.cpp
+SRC = Megaphone.cpp
 OBJ = $(SRC:.cpp=.o)
 
 .PHONY: all clean fclean re
